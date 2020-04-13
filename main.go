@@ -98,7 +98,7 @@ func main() {
 		minPrice:   ExpectedPrice,
 	})
 
-	go fetch(taskCtx, 30*time.Second, 7*time.Second, notifier, &Rueducommerce{
+	go fetch(taskCtx, 30*time.Second, 7*time.Second, notifier, &RueDuCommerce{
 		productUrl: "https://www.rueducommerce.fr/produit/nintendo-console-switch-2019-bleue-rouge-90637297/offre-181087650",
 		minPrice:   ExpectedPrice,
 	})

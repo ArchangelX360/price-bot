@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/chromedp/chromedp"
+	"strconv"
 	"time"
 )
 
@@ -12,15 +13,19 @@ type RueDuCommerce struct {
 	minPrice   float64
 }
 
-func (ru *Rueducommerce) Name() string {
+func (ru *RueDuCommerce) Name() string {
 	return "RUE_DU_COMMERCE"
 }
 
-func (ru *Rueducommerce) MinPrice() float64 {
+func (ru *RueDuCommerce) MinPrice() float64 {
 	return ru.minPrice
 }
 
-func (ru *Rueducommerce) FetchPrice(ctx context.Context) (float64, error) {
+func (ru *RueDuCommerce) IsAvailable(_ context.Context) (bool, error) {
+	return true, nil // TODO
+}
+
+func (ru *RueDuCommerce) FetchPrice(ctx context.Context) (float64, error) {
 	p, err := ru.getPrice(ctx)
 	if err != nil {
 		return InvalidPrice, fmt.Errorf("could not fetch price, got error %v", err)
@@ -28,7 +33,7 @@ func (ru *Rueducommerce) FetchPrice(ctx context.Context) (float64, error) {
 	return p, nil
 }
 
-func (ru *Rueducommerce) getPrice(ctx context.Context) (float64, error) {
+func (ru *RueDuCommerce) getPrice(ctx context.Context) (float64, error) {
 	var price string
 	var ok bool
 	err := chromedp.Run(ctx,
