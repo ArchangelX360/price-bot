@@ -38,7 +38,7 @@ func (cd *Cdiscount) getPrice(ctx context.Context) (float64, error) {
 	var ok bool
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(cd.productUrl),
-		chromedp.Sleep(10*time.Second),
+		chromedp.Sleep(20*time.Second),
 		chromedp.AttributeValue("[itemprop='price']", "content", &price, &ok))
 	if err != nil {
 		return InvalidPrice, err
