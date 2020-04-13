@@ -13,7 +13,7 @@ type Rueducommerce struct {
 }
 
 func (ru *Rueducommerce) Name() string {
-	return "RUEDUCOMMERCE"
+	return "RUE_DU_COMMERCE"
 }
 
 func (ru *Rueducommerce) MinPrice() float64 {
