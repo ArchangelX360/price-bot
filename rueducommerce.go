@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type Rueducommerce struct {
+type RueDuCommerce struct {
 	productUrl string
 	minPrice   float64
 }
