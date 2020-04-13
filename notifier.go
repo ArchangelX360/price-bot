@@ -19,7 +19,7 @@ type SmtpCrendentials struct {
 
 type SmtpOptions struct {
 	From string           `json:"from"`
-	To   string           `json:"to"`
+	To   []string         `json:"to"`
 	Auth SmtpCrendentials `json:"auth"`
 }
 
@@ -36,10 +36,10 @@ func NewSmtpNotifier(stmpOptionsFilepath string) *SmtpNotifier {
 func (n *SmtpNotifier) Notify(websiteName string, price float64) {
 	infoLogger.Printf("[%s] The product is available at %.2f", websiteName, price)
 
-	recipients := []string{n.options.To}
-	subject := fmt.Sprintf("[%s] AVAILABLE AT PRICE %d", websiteName, price)
+	recipients := n.options.To
+	subject := fmt.Sprintf("[%s] AVAILABLE AT PRICE %.2f", websiteName, price)
 	mailContent := fmt.Sprintf(
-		"To: %s\r\n"+"Subject: %s\r\n"+"\r\n"+"The product is available at price %f.\r\n",
+		"To: %s\r\n"+"Subject: %s\r\n"+"\r\n"+"The product is available at price %.2f.\r\n",
 		recipients[0],
 		subject,
 		price)
