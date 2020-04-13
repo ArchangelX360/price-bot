@@ -29,25 +29,17 @@ func (ru *Rueducommerce) FetchPrice(ctx context.Context) (float64, error) {
 }
 
 func (ru *Rueducommerce) getPrice(ctx context.Context) (float64, error) {
-	var price float64
+	var price string
+	var ok bool
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(ru.productUrl),
 		chromedp.Sleep(2*time.Second),
-		chromedp.Evaluate(ru.getPriceJS(), &price))
-	return price, err
-}
-
-func (ru *Rueducommerce) getPriceJS() string {
-	return fmt.Sprintf(`
-function convertPriceStringToFloat(price) {
-    return parseFloat(price.replace('€', '.'))
-}
-
-function getPrice() {
-    const priceElement = document.getElementsByClassName("price-pricesup")[0]
-    return priceElement && priceElement.innerText ? convertPriceStringToFloat(priceElement.innerText) : %d;
-}
-
-getPrice();
-`, InvalidPrice)
+		chromedp.AttributeValue("[itemprop='price']", "content", &price, &ok))
+	if err != nil {
+		return InvalidPrice, err
+	}
+	if !ok {
+		return InvalidPrice, fmt.Errorf("failed to retrieve attribute value")
+	}
+	return strconv.ParseFloat(price, 64)
 }
