@@ -20,11 +20,11 @@ func (cb *CoolBlue) MinPrice() float64 {
 }
 
 func (cb *CoolBlue) IsAvailable(ctx context.Context) (bool, error) {
-	var price bool
+	var isAvailable bool
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(cb.productUrl),
-		chromedp.Evaluate(cb.isAvailableJS(), &price))
-	return price, err
+		chromedp.Evaluate(cb.isAvailableJS(), &isAvailable))
+	return isAvailable, err
 }
 
 func (cb *CoolBlue) FetchPrice(ctx context.Context) (float64, error) {

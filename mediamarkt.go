@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/chromedp/chromedp"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -25,18 +26,18 @@ func (m *MediaMarkt) MinPrice() float64 {
 }
 
 func (m *MediaMarkt) IsAvailable(ctx context.Context) (bool, error) {
-	var price string
+	var availibility string
 	var ok bool
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(m.productUrl),
-		chromedp.AttributeValue("[itemprop='availability']", "content", &price, &ok))
+		chromedp.AttributeValue("[itemprop='availability']", "content", &availibility, &ok))
 	if err != nil {
 		return false, err
 	}
 	if !ok {
 		return false, fmt.Errorf("failed to retrieve attribute value")
 	}
-	return price == InStock, nil
+	return strings.Compare(availibility, InStock) == 0, nil
 }
 
 func (m *MediaMarkt) FetchPrice(ctx context.Context) (float64, error) {
