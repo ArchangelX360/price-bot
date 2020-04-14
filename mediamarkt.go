@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/chromedp/chromedp"
 	"strconv"
-	"strings"
 )
 
 const (
@@ -37,7 +36,7 @@ func (m *MediaMarkt) IsAvailable(ctx context.Context) (bool, error) {
 	if !ok {
 		return false, fmt.Errorf("failed to retrieve attribute value")
 	}
-	return strings.Compare(availibility, InStock) == 0, nil
+	return availibility == InStock, nil
 }
 
 func (m *MediaMarkt) FetchPrice(ctx context.Context) (float64, error) {
