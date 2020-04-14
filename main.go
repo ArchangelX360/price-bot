@@ -76,19 +76,19 @@ func main() {
 	})
 
 	go fetch(taskCtx, 30*time.Second, 3*time.Second, notifier, &Amazon{
-		productUrl: "http://amazon.nl/gp/offer-listing/B07WKNQ8JT",
+		productUrl: "https://www.amazon.nl/gp/offer-listing/B085DPD2RM/ref=olp_twister_all?ie=UTF8&mv_edition=all&mv_platform_for_display=0",
 		minPrice:   ExpectedPrice,
 		country:    "NL",
 	})
 
 	go fetch(taskCtx, 30*time.Second, 4*time.Second, notifier, &Amazon{
-		productUrl: "https://www.amazon.fr/gp/offer-listing/B07WKNQ8JT",
+		productUrl: "https://www.amazon.fr/gp/offer-listing/B07D3JMR8W/ref=olp_twister_all?ie=UTF8&mv_access_method=&mv_edition=all&mv_platform_for_display=0",
 		minPrice:   ExpectedPrice,
 		country:    "FR",
 	})
 
 	go fetch(taskCtx, 30*time.Second, 5*time.Second, notifier, &Amazon{
-		productUrl: "https://www.amazon.de/gp/offer-listing/B07WKNQ8JT",
+		productUrl: "https://www.amazon.de/gp/offer-listing/B084J4Y4M6/ref=olp_twister_all?ie=UTF8&mv_color_name=all&mv_edition=all",
 		minPrice:   ExpectedPrice,
 		country:    "DE",
 	})
