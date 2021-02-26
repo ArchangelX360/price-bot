@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: price-bot
+  namespace: price-bot
+spec:
+  endpoints:
+    - interval: 5s
+      path: /metrics
+      port: 80-80
+  selector:
+    matchLabels:
+      app: price-bot
