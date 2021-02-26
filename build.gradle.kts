@@ -47,9 +47,7 @@ application {
 }
 
 docker {
-    val registry = "docker.pkg.github.com"
-    val repository = "archangelx360/price-bot"
-    val imageFullName = "$registry/$repository/${project.name}"
+    val imageName = "ghcr.io/archangelx360/price-bot"
 
     val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
     val ciCommitSha: String? = System.getenv("GITHUB_SHA") ?: versionDetails().gitHashFull
@@ -57,9 +55,9 @@ docker {
     dependsOn(tasks.test.get())
     dependsOn(tasks.installDist.get())
 
-    name = imageFullName
+    name = imageName
 
-    tag("latestSha", "$imageFullName:$ciCommitSha")
+    tag("latestSha", "$imageName:$ciCommitSha")
 
     files(tasks.installDist.get().outputs)
 
