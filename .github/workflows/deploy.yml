@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Publish Docker image
-        run: ./gradlew ":dockerPushLatestSha"
+        run: ./gradlew ":dockerTagsPush"
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2

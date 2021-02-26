@@ -58,6 +58,7 @@ docker {
     name = imageName
 
     tag("latestSha", "$imageName:$ciCommitSha")
+    tag("latest", "$imageName:latest")
 
     files(tasks.installDist.get().outputs)
 
