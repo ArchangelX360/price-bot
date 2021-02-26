@@ -7,7 +7,7 @@ spec:
   endpoints:
     - interval: 5s
       path: /metrics
-      port: 80-80
+      port: bot
   selector:
     matchLabels:
       app: price-bot
