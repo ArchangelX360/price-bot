@@ -41,6 +41,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
