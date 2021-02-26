@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,6 +38,9 @@ jobs:
       - name: Publish Docker image
         run: ./gradlew ":dockerTagsPush"
 
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
