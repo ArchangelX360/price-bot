@@ -58,7 +58,7 @@ class Megekko(
 
     override suspend fun fetch() {
         productLists.forEach { listing ->
-            ChromeDPClient("http://127.0.0.1:9222").webSocket().use { browserSession ->
+            ChromeDPClient().webSocket().use { browserSession ->
                 browserSession
                     .attachToNewPageAndAwaitPageLoad(
                         url = listing.url,
