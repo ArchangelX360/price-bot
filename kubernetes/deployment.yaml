@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: price-bot
+  namespace: price-bot
+spec:
+  selector:
+    matchLabels:
+      app: price-bot
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: price-bot
+    spec:
+      containers:
+        - name: bot
+          image: ghcr.io/archangelx360/price-bot:1ec1f3fc7056e32658dd7d0edbae0feb96835ab2
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "300Mi"
+        - name: browser
+          image: zenika/alpine-chrome
+          args:
+            - --no-sandbox
+            - --remote-debugging-address=127.0.0.1
+            - --remote-debugging-port=9222
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "300Mi"
