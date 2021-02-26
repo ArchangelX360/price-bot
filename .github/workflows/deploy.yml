@@ -9,26 +9,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up JDK 13
         uses: actions/setup-java@v1.4.3
         with:
           java-version: 13
+
       - name: Gradle build cache
         uses: actions/cache@v1
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-build-${{ hashFiles('**/*.gradle*') }}
           restore-keys: ${{ runner.os }}-gradle-build-
+
       - name: Gradle wrapper cache
         uses: actions/cache@v1
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
+
       - name: Publish Docker image
         run: ./gradlew ":dockerPushLatestSha"
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Setup DigitalOcean kubeconfig
+        # Short-lived credentials (5 min) to avoid accumulating tokens
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 300 bro-cluster
+
+      - name: Update deployment file
+        run: TAG=${{ env.GITHUB_SHA }} && sed -i 's|:latest|:'${TAG}'|' kubernetes/server.yml
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f kubernetes
+
+      - name: Verify deployment
+        run: kubectl rollout status --namespace seven-wonders deployment/seven-wonders

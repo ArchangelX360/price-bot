@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: bot
-          image: ghcr.io/archangelx360/price-bot:1ec1f3fc7056e32658dd7d0edbae0feb96835ab2
+          image: ghcr.io/archangelx360/price-bot:latest
           ports:
             - containerPort: 8080
           resources:
