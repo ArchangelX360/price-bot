@@ -3,6 +3,8 @@ kind: ServiceMonitor
 metadata:
   name: price-bot
   namespace: price-bot
+  labels:
+    release: prometheus-operator
 spec:
   endpoints:
     - interval: 5s
