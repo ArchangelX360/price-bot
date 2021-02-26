@@ -54,10 +54,10 @@ class FetcherScheduler<T : Any>(
     private suspend fun updateState() {
         repeat(maxRetry) {
             try {
-                LOG.debug("[${fetcher.name}] Fetching...")
+                LOG.info("[${fetcher.name}] Fetching...")
                 state.value = fetcher.fetch()
                 lastSuccessfulRefresh.set(Instant.now().epochSecond)
-                LOG.debug("[${fetcher.name}] successfully fetched, will run again in $period")
+                LOG.info("[${fetcher.name}] successfully fetched, will run again in $period")
                 return
             } catch (e: TimeoutCancellationException) {
                 throw e
