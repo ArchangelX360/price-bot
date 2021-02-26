@@ -48,7 +48,7 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 300 bro-cluster
 
       - name: Update deployment file
-        run: TAG=${{ env.GITHUB_SHA }} && sed -i 's|:latest|:'${TAG}'|' kubernetes/deployment.yml
+        run: TAG=${{ github.sha }} && sed -i 's|:latest|:'${TAG}'|' kubernetes/deployment.yml
 
       - name: Deploy to DigitalOcean Kubernetes
         run: kubectl apply -f kubernetes
