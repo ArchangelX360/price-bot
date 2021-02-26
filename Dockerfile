@@ -1,7 +1,10 @@
-FROM docker.pkg.github.com/archangelx360/price-bot/base:latest
+FROM openjdk:11.0.2-jre
 
-ADD price-bot .
+EXPOSE 8080:8080
 
-EXPOSE 8091
+RUN mkdir /app
+COPY bin/ /app/bin/
+COPY lib/ /app/lib/
 
-ENTRYPOINT ["sh", "-c", "./price-bot"]
+WORKDIR /app/bin
+CMD ["./price-bot"]

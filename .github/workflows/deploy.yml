@@ -9,31 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Bundling Golang for Linux
-        run: GOOS=linux GOARCH=arm GOARM=7 CGO_ENABLED=0 go build -o price-bot .
-      - uses: docker/build-push-action@v1
+      - name: Set up JDK 13
+        uses: actions/setup-java@v1.4.3
         with:
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-          registry: docker.pkg.github.com
-          repository: archangelx360/price-bot/bot
-          tag_with_ref: true
-          tag_with_sha: true
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploying on ${{ secrets.HOST }}
-        uses: appleboy/ssh-action@master
+          java-version: 13
+      - name: Gradle build cache
+        uses: actions/cache@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script_stop: true
-          script: |
-            docker stop price-bot || true
-            docker rm price-bot || true
-            docker login -u ${{ github.actor }} -p ${{ github.token }} docker.pkg.github.com
-            docker pull docker.pkg.github.com/archangelx360/price-bot/bot:latest
-            docker run -d -v /opt/price-bot/config:/opt/config -p 8091:8091 --name=price-bot docker.pkg.github.com/archangelx360/price-bot/bot:latest
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-build-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: ${{ runner.os }}-gradle-build-
+      - name: Gradle wrapper cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+      - name: Publish Docker image
+        script: |
+          docker login -u ${{ github.actor }} -p ${{ github.token }} docker.pkg.github.com
+          ./gradlew ":dockerPushLatestSha"
