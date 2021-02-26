@@ -1,5 +1,6 @@
 .idea/
-smtp.json
 price-bot.iml
 price-bot
 price-bot.exe
+.gradle
+build
