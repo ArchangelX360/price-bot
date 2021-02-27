@@ -54,4 +54,4 @@ jobs:
         run: kubectl apply -f kubernetes
 
       - name: Verify deployment
-        run: kubectl rollout status --namespace seven-wonders deployment/seven-wonders
+        run: kubectl rollout status --namespace price-bot deployment/price-bot
