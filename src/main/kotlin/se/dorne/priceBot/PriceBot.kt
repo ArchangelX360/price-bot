@@ -6,18 +6,18 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.micrometer.core.instrument.DistributionSummary
 import io.micrometer.core.instrument.ImmutableTag
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.json.Json
 import org.hildan.chrome.devtools.domains.runtime.evaluateJs
 import org.hildan.chrome.devtools.protocol.ChromeDPClient
 import org.hildan.chrome.devtools.targets.attachToNewPageAndAwaitPageLoad
 import org.hildan.chrome.devtools.targets.use
+import org.slf4j.LoggerFactory
 import se.dorne.priceBot.utils.Fetcher
 import se.dorne.priceBot.utils.FetcherScheduler
 import java.util.concurrent.Executors
@@ -80,18 +80,25 @@ class Megekko(
 
                         """.trimIndent()
                         val products = pageSession.runtime.evaluateJs<List<Product>>(getProductPricesQuery)
+                        LOG.info("{}", products)
                         products?.forEach { product ->
                             registry.gauge(
-                                "bot_prices", mutableListOf(
+                                "bot_prices",
+                                mutableListOf(
                                     ImmutableTag("website", name),
                                     ImmutableTag("category", listing.category.prometheusLabel),
                                     ImmutableTag("name", product.name),
-                                ), AtomicInteger(),
+                                ),
+                                AtomicInteger(),
                             )!!.set(product.price.toInt())
                         }
                     }
             }
         }
+    }
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger(Megekko::class.java)
     }
 }
 
